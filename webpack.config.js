@@ -16,8 +16,8 @@ export default {
   },
   devtool: 'cheap-module-source-map',
   entry: {
-    SEQTA: './src/SEQTA.js',
-    background: './src/background.js',
+    SEQTA: './src/SEQTA.ts',
+    background: './src/background.ts',
     'css/documentload': './src/css/documentload.scss',
     'css/iframe': './src/css/iframe.scss',
     'css/injected': './src/css/injected.scss',
@@ -53,7 +53,15 @@ export default {
           filename: 'src/[path][name][ext]',
         },
       },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      }
     ],
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
   },
   plugins: [
     new ESLintPlugin(),

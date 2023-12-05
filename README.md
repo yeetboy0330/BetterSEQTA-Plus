@@ -7,13 +7,13 @@
 
 <p align="center">
  <a target="_blank" href="https://chrome.google.com/webstore/detail/betterseqta%20/afdgaoaclhkhemfkkkonemoapeinchel"><img src="https://user-images.githubusercontent.com/95666457/149519713-159d7ef7-2c21-4034-a616-f037ff46d9a4.png" alt="ChromeDownload" width="250"></a>
+  <a target="_blank" href="https://discord.gg/YzmbnCDkat"><img src="https://github.com/SethBurkart123/EvenBetterSEQTA/assets/108050083/23055730-b16e-44c0-9bef-221d8545af92" width="240" style="border-radius:10%;" /></a>
 </p>
 
 ## Table of contents
 
 - [Features](#features)
 - [Getting Started](#getting-started)
-- [Contributing](#contributing)
 
 ## Release Videos
 <video autoplay loop muted controls="false" width="33%" src="https://github.com/SethBurkart123/EvenBetterSEQTA/assets/108050083/3084644a-edbc-40e5-b1ad-1fdea4f0ca18"></video>
@@ -47,25 +47,50 @@
 git clone https://github.com/SethBurkart123/EvenBetterSEQTA
 ```
 
-2. Install dependencies
+### Windows
+
+Open the `install.bat` file located inside the `scripts` folder. Then after that is finished, open the `dev.bat` file.
+
+### Mac & Linux
+
+1. `cd` into the seqta folder
+```
+cd EvenBetterSEQTA/scripts
+```
+2. Make the scripts in the folder executable
+```
+chmod a+x *
+```
+3. Run the install and dev scripts
+```
+sh install.sh
+```
+4. Open a new terminal session to let the new command activate, then run
+```
+sh dev.sh
+```
+
+### Manual
+
+1. Install dependencies
 
 ```
 npm install
 ```
 
-3. Install webpack
+2. Install webpack
 
 ```
 npm install -g webpack
 ```
 
-4. Run the dev script (it updates as you save files)
+3. Run the dev script (it updates as you save files)
 
 ```
 npm run dev
 ```
 
-5. Install and run the dev script for the interface **at the same time** (all custom react components are a separate sub-repository)
+4. Install and run the dev script for the interface **at the same time** (all custom react components are a separate sub-repository)
 
 ```
 cd interface
@@ -74,6 +99,7 @@ npm install
 npm run dev
 ```
 
+
 ## Folder Structure
 
 The folder structure is as follows:
@@ -81,6 +107,8 @@ The folder structure is as follows:
 - The `public` folder contains files that are not compiled, but only copied across to the build directory
 
 - The `src` folder contains source files that are compiled to the build directory, these can use import statements so that we can do code splitting.
+
+- The `interface` folder contains source React files that are required for the UI/UX of the Settings page. It is compiled into the build directory alongside files within `src/`.
 
 - The `build` folder is where the compiled code ends up, this is the folder what you need to load into chrome as an unpacked extension for development.
 

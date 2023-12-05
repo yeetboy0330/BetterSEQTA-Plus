@@ -23,8 +23,7 @@
     ]
 },
   "optional_permissions": [
-    "*://*/*",
-    "declarativeContent"
+    "*://*/*"
   ],
   "content_scripts": [
     {
