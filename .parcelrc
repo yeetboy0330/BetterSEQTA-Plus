@@ -1,5 +1,7 @@
 {
-"transformers": {
-    "raw:*": ["@parcel/transformer-raw"]
+  "extends": "@parcel/config-webextension",
+  "transformers": {
+    "raw:*": ["@parcel/transformer-raw"],
+    "*.svelte": ["parcel-transformer-svelte-4"]
   }
 }
