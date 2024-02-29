@@ -10,7 +10,6 @@ import LogoLightOutline from 'url:./resources/icons/betterseqta-light-outline.pn
 import icon48 from 'url:./resources/icons/icon-48.png'
 
 import Popup from 'url:./interface/index.html'
-import SveltePopup from 'url:./svelte-interface/index.html'
 
 import Color from 'color'
 import MenuitemSVGKey from './seqta/content/MenuItemSVGKey.json'
@@ -919,16 +918,6 @@ function addExtensionSettings() {
   extensionIframe.style.width = '384px'
   extensionIframe.style.height = '100%'
   extensionIframe.style.border = 'none'
-  extensionPopup.appendChild(extensionIframe)
-
-  const SvelteExtensionIframe: HTMLIFrameElement = document.createElement('iframe')
-  SvelteExtensionIframe.src = `${SveltePopup}#settings/embedded`
-  SvelteExtensionIframe.id = 'ExtensionIframe'
-  SvelteExtensionIframe.setAttribute('allowTransparency', 'true')
-  SvelteExtensionIframe.setAttribute('excludeDarkCheck', 'true')
-  SvelteExtensionIframe.style.width = '384px'
-  SvelteExtensionIframe.style.height = '100%'
-  SvelteExtensionIframe.style.border = 'none'
   extensionPopup.appendChild(extensionIframe)
 
   const container = document.getElementById('container')
