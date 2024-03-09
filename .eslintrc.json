@@ -10,6 +10,7 @@
     "ecmaVersion": "latest",
     "sourceType": "module" // add this line to allow 'import' and 'export' statements
   },
+  "plugins": ["import"],
   "rules": {
     // allow importing ts extensions
     "sort-imports": ["error", {

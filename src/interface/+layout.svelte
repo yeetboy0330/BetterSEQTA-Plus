@@ -1,11 +1,12 @@
-<script>
-  import './index.css';
+<script lang="ts">
+  // @ts-expect-error - svelte-hash-router is not typed
   import Router from 'svelte-hash-router'
-
   import browser from 'webextension-polyfill';
-  import font from 'url:../resources/fonts/IconFamily.woff'
-
   import * as Sentry from "@sentry/react";
+
+  import IconFamily from 'url:../resources/fonts/IconFamily.woff'
+  import IconFamily2 from 'url:../resources/fonts/IconFamily.woff2'
+  import './index.css';
 
   browser.storage.local.get([ "telemetry" ]).then((telemetry) => {
     if (telemetry.telemetry === true)
@@ -24,7 +25,8 @@
   style.innerHTML = `
   @font-face {
     font-family: 'IconFamily';
-    src: url('${font}') format('woff');
+    src: url('${IconFamily}') format('woff'),
+         url('${IconFamily2}') format('woff2');
     font-weight: normal;
     font-style: normal;
   }`;

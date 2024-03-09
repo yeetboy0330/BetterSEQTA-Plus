@@ -5,6 +5,7 @@ import loading, { AppendLoadingSymbol } from './seqta/ui/Loading'
 
 import updateVideo from 'url:./resources/update-video.mp4'
 import IconFamily from 'url:./resources/fonts/IconFamily.woff'
+import IconFamily2 from 'url:./resources/fonts/IconFamily.woff2'
 import LogoLight from 'url:./resources/icons/betterseqta-light-icon.png'
 import LogoLightOutline from 'url:./resources/icons/betterseqta-light-outline.png'
 import icon48 from 'url:./resources/icons/icon-48.png'
@@ -824,7 +825,8 @@ function InjectCustomIcons() {
   style.innerHTML = `
     @font-face {
       font-family: 'IconFamily';
-      src: url('${IconFamily}') format('woff');
+      src: url('${IconFamily}') format('woff'),
+          url('${IconFamily2}') format('woff2');
       font-weight: normal;
       font-style: normal;
     }`

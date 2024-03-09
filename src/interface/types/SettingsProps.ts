@@ -1,9 +1,11 @@
 import type { SettingsState } from './AppProps';
+import { ComponentType } from 'svelte';
 
 export interface SettingsList {
   title: string;
   description: string;
-  modifyElement: JSX.Element;
+  component: ComponentType;
+  props?: any;
 }
 export interface SettingsProps {
   settingsState: SettingsState;

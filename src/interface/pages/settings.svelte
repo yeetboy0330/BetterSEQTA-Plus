@@ -1,19 +1,22 @@
-<script>
+<script lang="ts">
   import TabbedContainer from '../components/TabbedContainer.svelte';
   import Settings from './settings/general.svelte';
   import Shortcuts from './settings/shortcuts.svelte';
   import Theme from './settings/theme.svelte';
   /* import Picker from './components/Picker.svelte'; */
-  import { browser } from 'webextension-polyfill';
+  import browser from 'webextension-polyfill';
+  import { initializeListeners } from '../state/SettingsState2'
 
   const openChangelog = () => {
-    chrome.runtime.sendMessage({ type: 'currentTab', info: 'OpenChangelog' });
+    browser.runtime.sendMessage({ type: 'currentTab', info: 'OpenChangelog' });
   };
 
+  
   import logo from '../../resources/icons/betterseqta-dark-full.png';
   import logoDark from '../../resources/icons/betterseqta-light-full.png';
-
+  
   let standalone = false;
+  initializeListeners();
 
   // Define the tabs array
   const tabs = [

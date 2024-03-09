@@ -1167,6 +1167,9 @@ div > ol:has(.uiFileHandlerWrapper) {
   width: 25px;
   height: 25px;
 }
+.dark .notifications__detailsBody___2nU2k > .notifications__subtitle___1se8e {
+  color: rgba(255, 255, 255, 0.5) !important;
+}
 .dark .legacy-root button::after {
   background: white;
 }
@@ -1387,6 +1390,11 @@ iframe.userHTML {
 #main:has(.timetablepage) #toolbar {
   background: var(--background-primary);
 }
+
+.dailycal .header .days td.scrollspacer {
+  display: none;
+}
+
 .dailycal > .zoom {
   display: none;
 }
