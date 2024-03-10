@@ -1,34 +1,8 @@
-import { writable, type Writable } from 'svelte/store';
-import browser from 'webextension-polyfill';
-import type { MainConfig, SettingsState } from '../types/AppProps';
+import browser from "webextension-polyfill";
+import { MainConfig, SettingsState } from "../types/AppProps";
+import { writable } from "svelte/store";
 
-interface KeyToStateMap {
-  notificationcollector: 'notificationCollector';
-  lessonalert: 'lessonAlerts';
-  telemetry: 'telemetry';
-  animatedbk: 'animatedBackground';
-  bksliderinput: 'animatedBackgroundSpeed';
-  selectedColor: 'customThemeColor';
-  onoff: 'betterSEQTAPlus';
-  shortcuts: 'shortcuts';
-  customshortcuts: 'customshortcuts';
-  transparencyEffects: 'transparencyEffects';
-}
-
-const keyToStateMap = {
-  notificationcollector: 'notificationCollector',
-  lessonalert: 'lessonAlerts',
-  telemetry: 'telemetry',
-  animatedbk: 'animatedBackground',
-  bksliderinput: 'animatedBackgroundSpeed',
-  selectedColor: 'customThemeColor',
-  onoff: 'betterSEQTAPlus',
-  shortcuts: 'shortcuts',
-  customshortcuts: 'customshortcuts',
-  transparencyEffects: 'transparencyEffects'
-};
-
-const initialSettingsState: SettingsState = {
+const initialState: SettingsState = {
   notificationCollector: false,
   lessonAlerts: false,
   telemetry: false,
@@ -42,63 +16,76 @@ const initialSettingsState: SettingsState = {
   theme: ''
 };
 
-const settingsStore: Writable<SettingsState> = writable(initialSettingsState);
-const previousSettingsStateStore: Writable<SettingsState> = writable(initialSettingsState);
+const keyToStateMap: { [key: string]: string } = {
+  notificationcollector: 'notificationCollector',
+  lessonalert: 'lessonAlerts',
+  telemetry: 'telemetry',
+  animatedbk: 'animatedBackground',
+  bksliderinput: 'animatedBackgroundSpeed',
+  selectedColor: 'customThemeColor',
+  onoff: 'betterSEQTAPlus',
+  shortcuts: 'shortcuts',
+  customshortcuts: 'customshortcuts',
+  transparencyEffects: 'transparencyEffects'
+};
 
-const storageChangeListener = (changes: browser.Storage.StorageChange) => {
+const stateToKeyMap = Object.fromEntries(
+  Object.entries(keyToStateMap).map(([key, value]) => [value, key])
+);
+
+const storageChangeListener = async (changes: browser.Storage.StorageChange) => {
   for (const [key, { newValue }] of Object.entries(changes)) {
-    if (key === 'DarkMode') {
+    const stateKey = keyToStateMap[key] || key;
+
+    if (stateKey === 'DarkMode') {
       if (newValue) {
         document.body.classList.add('dark');
       } else {
         document.body.classList.remove('dark');
       }
     }
-    const stateKey = keyToStateMap[key as keyof KeyToStateMap];
-    if (stateKey) {
-      settingsStore.update((prevState) => ({ ...prevState, [stateKey]: newValue }));
-    }
+    settingsState.update((prevState) => ({ ...prevState, [stateKey]: newValue }));
   }
-};
+}
 
-const setStorage = (key: keyof MainConfig, value: any) => {
-  browser.storage.local.set({ [key]: value });
-};
+const initialStorageLoad = async (storage: MainConfig) => {
+  for (const [key, value] of Object.entries(storage)) {
+    const stateKey = keyToStateMap[key] || key;
 
-$: {
-  browser.storage.local.get().then((result: any) => {
-    const mainConfigResult = result as MainConfig;
-    settingsStore.set({
-      notificationCollector: mainConfigResult.notificationcollector,
-      lessonAlerts: mainConfigResult.lessonalert,
-      telemetry: mainConfigResult.telemetry,
-      animatedBackground: mainConfigResult.animatedbk,
-      animatedBackgroundSpeed: mainConfigResult.bksliderinput,
-      customThemeColor: mainConfigResult.selectedColor,
-      betterSEQTAPlus: mainConfigResult.onoff,
-      shortcuts: mainConfigResult.shortcuts,
-      customshortcuts: mainConfigResult.customshortcuts,
-      transparencyEffects: mainConfigResult.transparencyEffects,
-      theme: mainConfigResult.theme
-    });
-    if (mainConfigResult.DarkMode) {
-      document.body.classList.add('dark');
+    if (stateKey === 'DarkMode') {
+      if (value) {
+        document.body.classList.add('dark');
+      } else {
+        document.body.classList.remove('dark');
+      }
     }
+    settingsState.update((prevState) => ({ ...prevState, [stateKey]: value }));
+  }
+}
+
+const settingsSubscription = (/* set: (value: SettingsState) => void */) => {
+  settingsState.subscribe((newState) => {
+    const stateToSave = Object.fromEntries(
+      Object.entries(newState).map(([key, value]) => [stateToKeyMap[key] || key, value])
+    );
+    browser.storage.local.set(stateToSave);
+    /* set(newState); */
   });
 }
 
-$: {
-  const prevSettingsState = previousSettingsStateStore;
-  const currSettingsState = settingsStore;
-  for (const [key, value] of Object.entries(currSettingsState)) {
-  const storageKey = Object.keys(keyToStateMap).find((k) => keyToStateMap[k as keyof KeyToStateMap] === key);
-  if (storageKey && value !== (prevSettingsState as any)[key]) {
-      setStorage(storageKey as keyof MainConfig, value);
-    }
-  }
-  previousSettingsStateStore.set(currSettingsState as any);
+export const initializeListeners = async () => {
+  const result = await browser.storage.local.get() as MainConfig;
+
+  await initialStorageLoad(result);
+
+  settingsSubscription();
+
+  browser.storage.onChanged.addListener(storageChangeListener);
 }
 
-browser.storage.onChanged.addListener(storageChangeListener);
 
-export { settingsStore }
+export const settingsState = writable(initialState);
+
+export const setSettingsValue = <K extends keyof SettingsState>(key: K, value: SettingsState[K]) => {
+  settingsState.update((prevState) => ({ ...prevState, [key]: value }));
+}

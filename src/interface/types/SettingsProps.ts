@@ -3,6 +3,7 @@ import { ComponentType } from 'svelte';
 
 export interface SettingsList {
   title: string;
+  id: number;
   description: string;
   component: ComponentType;
   props?: any;

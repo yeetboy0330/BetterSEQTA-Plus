@@ -5,7 +5,7 @@
   import Theme from './settings/theme.svelte';
   /* import Picker from './components/Picker.svelte'; */
   import browser from 'webextension-polyfill';
-  import { initializeListeners } from '../state/SettingsState2'
+  import { initializeListeners } from '../state/SettingsState'
 
   const openChangelog = () => {
     browser.runtime.sendMessage({ type: 'currentTab', info: 'OpenChangelog' });
