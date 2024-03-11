@@ -35,7 +35,16 @@
     }
   }
 
-  $: animation($settingsState[setting])
+  $: ((enabled) => {
+      if (handle) {
+        animate(
+          handle,
+          { x: enabled ? 24 : 0 },
+          { easing: spring({ stiffness: 500, damping: 30 }) }
+        )
+      }
+    })($settingsState[setting])
+
 </script>
 
 <div
