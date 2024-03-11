@@ -63,7 +63,7 @@
       component: Button,
       props: {
         onClick: () => browser.runtime.sendMessage({ type: 'currentTab', info: 'EditSidebar' }),
-        className: 'px-4 py-1 text-[0.75rem] dark:bg-[#38373D] bg-[#DDDDDD] dark:text-white rounded-md'
+        text: "Edit"
       }
     },
     {
@@ -109,6 +109,8 @@
       <div>
         {#if props?.state !== undefined}
           <svelte:component this={Component} {...props} bind:setting={props.state} />
+        {:else}
+          <svelte:component this={Component} {...props} />
         {/if}
       </div>
     </div>
