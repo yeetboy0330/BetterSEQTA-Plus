@@ -35,9 +35,7 @@
     }
   }
 
-  $: {
-    animation($settingsState[setting])
-  }
+  $: animation($settingsState[setting])
 </script>
 
 <div
