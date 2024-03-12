@@ -32,7 +32,7 @@
     "@parcel/optimizer-data-url": "^2.11.0",
     "@parcel/packager-ts": "2.11.0",
     "@parcel/transformer-inline-string": "^2.11.0",
-    "@parcel/transformer-sass": "2.12.0",
+    "@parcel/transformer-sass": "2.11.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.2",
     "eslint": "^8.56.0",
     "eslint-plugin-import": "^2.29.1",
@@ -50,6 +50,7 @@
     "url": "^0.11.3"
   },
   "dependencies": {
+    "@jaames/iro": "^5.5.2",
     "@parcel/transformer-raw": "^2.11.0",
     "@plasmohq/parcel-transformer-svelte": "^0.5.2",
     "@sentry/browser": "^7.100.1",

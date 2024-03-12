@@ -1561,6 +1561,11 @@ ul {
 .entry[data-yiq="dark"] .title {
   color: #000 !important;
 }
+
+[data-yiq="dark"] svg {
+  color: black !important;
+}
+
 div.entry.class {
   border-radius: 0.25rem;
 }
