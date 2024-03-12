@@ -17,9 +17,11 @@
   // Calculate tabWidth dynamically based on tabs length
   onMount(() => {
     if (containerRef) {
-      const width = containerRef.getBoundingClientRect().width;
-      tabWidth = width / tabs.length;
-      document.documentElement.style.setProperty('--tab-width', `${tabWidth}px`);
+
+      tabWidth = 100 / tabs.length;
+      document.documentElement.style.setProperty('--tab-width', `${tabWidth}%`);
+
+      calcXPos = (index) => tabWidth * (index !== null ? index : $activeTab) * (containerRef !== null ? containerRef.getBoundingClientRect().width : 0) / 100;
     }
 
     // Listen for messages
@@ -35,7 +37,7 @@
     };
   });
 
-  const calcXPos = (index) => tabWidth * (index !== null ? index : $activeTab);
+  let calcXPos = (index) => tabWidth * (index !== null ? index : $activeTab);
 </script>
 
 <div bind:this={containerRef} class="top-0 z-10 text-[0.875rem] pb-0.5 mx-4">
@@ -43,7 +45,6 @@
   <div class="relative flex">
     <MotionDiv
       class="absolute top-0 left-0 z-0 h-full bg-[#DDDDDD] dark:bg-[#38373D] tab-width rounded-full opacity-40"
-      style="width: {tabWidth}px"
       animate={{ x: calcXPos($hoveredTab) }}
       transition={springTransition}
     />
