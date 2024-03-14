@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { onMount } from 'svelte';
   import iro from '@jaames/iro';
 
@@ -47,23 +47,49 @@
   });
 
   function handleDragStart(event: PointerEvent, index: number) {
-    draggingStop = index;
+    if (draggingStop !== -1) {
+      // Prevent starting a new drag if one is already in progress.
+      event.preventDefault(); // This stops the pointerdown event from taking any effect.
+      return;
+    }
+
+    draggingStop = index; // Mark this stop as being dragged.
     initialDragPosition = event.clientX;
   }
 
   function handleDragMove(event: PointerEvent) {
-    if (draggingStop !== -1) {
-      const stopWidth = (event.currentTarget as HTMLDivElement).offsetWidth;
-      const dragDelta = event.clientX - initialDragPosition;
-      const newPosition = Math.max(
-        0,
-        Math.min(1, gradientStops[draggingStop].position + dragDelta / stopWidth)
-      );
-      gradientStops = gradientStops.map((stop, index) =>
-        index === draggingStop ? { ...stop, position: newPosition } : stop
-      );
-      gradientStops = gradientStops.sort((a, b) => a.position - b.position);
-    }
+    if (draggingStop === -1) return;
+
+    const container = event.currentTarget as HTMLDivElement;
+    const stopWidth = container.offsetWidth;
+    const containerOffset = container.getBoundingClientRect().left;
+    const relativePosition = (event.clientX - containerOffset) / stopWidth;
+
+    const sortedStops = [...gradientStops];
+    sortedStops.sort((a, b) => a.position - b.position);
+
+    const prevStopIndex = sortedStops.findIndex(
+      (stop, index) => index < draggingStop && stop.position < relativePosition
+    );
+    const nextStopIndex = sortedStops.findIndex(
+      (stop, index) => index > draggingStop && stop.position > relativePosition
+    );
+
+    const prevStop = prevStopIndex >= 0 ? sortedStops[prevStopIndex] : { position: 0 };
+    const nextStop = nextStopIndex >= 0 ? sortedStops[nextStopIndex] : { position: 1 };
+
+    const clampedPosition = Math.max(prevStop.position, Math.min(nextStop.position, relativePosition));
+
+    const newGradientStops = gradientStops.slice();
+    newGradientStops.sort((a, b) => a.position - b.position);
+
+    const draggedStop = newGradientStops[draggingStop];
+    newGradientStops.splice(draggingStop, 1);
+
+    const insertIndex = newGradientStops.findIndex(stop => stop.position >= clampedPosition);
+    newGradientStops.splice(insertIndex, 0, { ...draggedStop, position: clampedPosition });
+
+    gradientStops = newGradientStops;
   }
 
   function handleDragEnd() {
@@ -88,6 +114,7 @@
     on:pointermove={handleDragMove}
     on:pointerup={handleDragEnd}
   >
+    <span class="opacity-0">This makes the gradient show up</span>
     {#each gradientStops as { position }, index}
       <button
         class="absolute w-4 h-4 bg-white rounded-md top-1/2"
@@ -97,4 +124,4 @@
       ></button>
     {/each}
   </div>
-</div>
+</div> -->
